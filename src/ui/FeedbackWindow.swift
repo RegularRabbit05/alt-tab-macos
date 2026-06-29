@@ -4,8 +4,12 @@ import Foundation
 class FeedbackWindow: NSWindow {
     static let token: String = {
         // token is encoded to/from base64 to avoid github noticing it and revoking it
-        let base64Token = Bundle.main.object(forInfoDictionaryKey: "FeedbackToken") as! String
-        return String(data: Data(base64Encoded: base64Token)!, encoding: .utf8)!
+        guard let base64Token = Bundle.main.object(forInfoDictionaryKey: "FeedbackToken") as? String,
+              let data = Data(base64Encoded: base64Token),
+              let token = String(data: data, encoding: .utf8) else {
+            return ""
+        }
+        return token
     }()
     static var shared: FeedbackWindow?
     var issueTitle: TextArea!
@@ -70,6 +74,11 @@ class FeedbackWindow: NSWindow {
     }
 
     private func checkEmptyFields() {
+        guard !FeedbackWindow.token.isEmpty else {
+            sendButton.isEnabled = false
+            sendButton.toolTip = "Feedback token not configured"
+            return
+        }
         sendButton.isEnabled = !body.stringValue.isEmpty && !issueTitle.stringValue.isEmpty
         sendButton.toolTip = sendButton.isEnabled ? "" : NSLocalizedString("Please fill in the form", comment: "")
     }

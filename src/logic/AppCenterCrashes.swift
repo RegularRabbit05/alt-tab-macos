@@ -3,14 +3,12 @@ import AppCenter
 import AppCenterCrashes
 
 class AppCenterCrash: NSObject {
-    static let secret = Bundle.main.object(forInfoDictionaryKey: "AppCenterSecret") as! String
+    static let secret = (Bundle.main.object(forInfoDictionaryKey: "AppCenterSecret") as? String) ?? ""
 
     override init() {
         super.init()
-        // Enable catching uncaught exceptions thrown on the main thread
         UserDefaults.standard.register(defaults: ["NSApplicationCrashOnExceptions": true])
-//        AppCenter.logLevel = .verbose
-        // without this, appcenter makes network call just from AppCenter.start; we only want networking when sending reports
+        guard !AppCenterCrash.secret.isEmpty, !AppCenterCrash.secret.hasPrefix("#") else { return }
         AppCenter.networkRequestsAllowed = false
         AppCenter.start(withAppSecret: AppCenterCrash.secret, services: [Crashes.self])
         Crashes.delegate = self

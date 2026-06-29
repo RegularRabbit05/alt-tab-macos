@@ -2,6 +2,11 @@
 
 set -exu
 
+if [ -z "${APPLE_P12_CERTIFICATE:-}" ]; then
+  echo "No APPLE_P12_CERTIFICATE provided, skipping code signing certificate setup."
+  exit 0
+fi
+
 certificateFile="codesign"
 
 # Recreate the certificate from the secure environment variable

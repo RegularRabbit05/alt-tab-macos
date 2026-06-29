@@ -2,6 +2,11 @@
 
 set -exu
 
+if [ -z "${SPARKLE_ED_PRIVATE_KEY:-}" ]; then
+  echo "No SPARKLE_ED_PRIVATE_KEY provided, skipping appcast update."
+  exit 0
+fi
+
 version="$(cat "$VERSION_FILE")"
 date="$(date +'%a, %d %b %Y %H:%M:%S %z')"
 minimumSystemVersion="$(awk -F ' = ' '/MACOSX_DEPLOYMENT_TARGET/ { print $2; }' < config/base.xcconfig)"

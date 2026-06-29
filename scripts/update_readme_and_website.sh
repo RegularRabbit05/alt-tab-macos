@@ -2,6 +2,11 @@
 
 set -exu
 
+if [ -z "${GITHUB_TOKEN:-}" ]; then
+  echo "No GITHUB_TOKEN provided, skipping readme and website update."
+  exit 0
+fi
+
 version="$(cat "$VERSION_FILE")"
 readOnlyToken="8170d6b4f0531ffd7f52edea374a3689"
 projectId="316051"
@@ -10,7 +15,7 @@ github_api_request() {
   local url="$1"
   curl -s \
     -H "Accept: application/vnd.github+json" \
-    -H "Authorization: token $GITHUB_TOKEN" \
+    -H "Authorization: token ${GITHUB_TOKEN:-}" \
     "https://api.github.com/repos/lwouis/alt-tab-macos$url"
 }
 
