@@ -1,3 +1,5 @@
+## [10.12.1](https://github.com/RegularRabbit05/alt-tab-macos/compare/v10.12.0...v10.12.1) (2026-06-29)
+
 # [10.12.0](https://github.com/lwouis/alt-tab-macos/compare/v10.11.0...v10.12.0) (2026-04-13)
 
 
